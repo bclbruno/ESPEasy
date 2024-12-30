@@ -145,11 +145,13 @@ String createGPIO_label(int gpio, int pinnr, bool input, bool output, bool warni
   result  = F("GPIO-");
   result += gpio;
 
+#ifdef ESP8266
   if (pinnr >= 0) {
     result += F(" (D");
     result += pinnr;
     result += ')';
   }
+#endif
 
   if (input != output) {
     result += ' ';
@@ -329,6 +331,10 @@ const __FlashStringHelper* getConflictingUse(int gpio, PinSelectPurpose purpose)
     return (Settings.CAN_Rx_pin == gpio) ? F("CAN RX") : F("CAN TX");
   }
   #endif
+  
+  if (isBootStrapPin(gpio)) {
+    return F("Boot Strapping");
+  }
 
   return F("");
 }
